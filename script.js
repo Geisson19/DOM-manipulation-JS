@@ -1,11 +1,11 @@
 "use strict";
-
 //Saco los elementos que no van a cambiar en constantes globales
 const tabla = document.querySelector(".tablaDatos");
 const nombre = document.querySelector(".nombre");
 const apellido = document.querySelector(".apellido");
 const correo = document.querySelector(".correo");
 const btnAgregar = document.querySelector("#btnAgregar");
+const modal = document.querySelector(".modal");
 
 //Json de los datos iniciales de la tabla (los cambié para probar los sorts)
 let ejemploDatos = [
@@ -45,9 +45,49 @@ const cambioDeColorListener = (tr) => {
   });
 };
 
-const borrarFilaButton = (tr, btnEliminar) => {
+const borrarFilaButton = (tr, btnEliminar, persona) => {
   btnEliminar.addEventListener("click", () => {
     tabla.removeChild(tr);
+    ejemploDatos.splice(ejemploDatos.indexOf(persona), 1);
+  });
+};
+
+const actualizarFilaButton = (tr, id, btnActualizar, persona) => {
+  btnActualizar.addEventListener("click", () => {
+    modal.style.display = "flex";
+
+    const btnCerrarModal = document.querySelector(".close");
+    btnCerrarModal.addEventListener("click", () => {
+      modal.style.display = "none";
+    });
+
+    const btnCerrarModal2 = document.querySelector("#close-modal");
+    btnCerrarModal2.addEventListener("click", () => {
+      modal.style.display = "none";
+    });
+
+    const btnGuardar = document.querySelector("#guardarDatos");
+    // Obtengo los datos del form
+    btnGuardar.addEventListener("click", () => {
+      const nombre = document.querySelector("#nombreModal").value;
+      const apellido = document.querySelector("#apellidoModal").value;
+      const correo = document.querySelector("#correoModal").value;
+      // Validación simple para agregar
+      const valido = nombre.length > 0 && apellido.length > 0 && correo.includes("@");
+      if (valido) {
+        const nuevaPersona = {
+          last_name: apellido,
+          first_name: nombre,
+          email: correo,
+          photo: persona.photo,
+        };
+        ejemploDatos[ejemploDatos.indexOf(persona)] = nuevaPersona;
+        const newtr = document.createElement("tr");
+        newtr.innerHTML = renderPersona(id, nuevaPersona);
+        tabla.replaceChild(newtr, tr);
+        modal.style.display = "none";
+      }
+    });
   });
 };
 
@@ -60,7 +100,9 @@ const renderPersonas = (personas) => {
     tabla.appendChild(tr);
     cambioDeColorListener(tr);
     const btnEliminar = document.querySelector(`#btnBorrar${id}`);
-    borrarFilaButton(tr, btnEliminar);
+    const btnActualizar = document.querySelector(`#btnActualizar${id}`);
+    borrarFilaButton(tr, btnEliminar, persona);
+    actualizarFilaButton(tr, id, btnActualizar, persona);
   });
 };
 
@@ -68,12 +110,13 @@ const renderPersonas = (personas) => {
 const renderPersona = (id, persona) => {
   return `
     <tr class="datoPersona">
+      <td id="idpersona">${id}</td>
       <td>${persona.first_name}</td>
       <td>${persona.last_name}</td>
       <td>${persona.email}</td>
       <td><img src="${persona.photo}" alt="Foto"></td>
       <td><button id="btnBorrar${id}" class="btn btn-light" >❌</button></td>
-      <td><button id="btnActualizar${id}"class="btn btn-light">Actualizar</button></td>
+      <td><button id="btnActualizar${id}"class="btn btn-light" data-toggle="modal">🆕</button></td>
     </tr>`;
 };
 

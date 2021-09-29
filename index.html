@@ -14,6 +14,45 @@
     <title>Ejercicio PreParcial</title>
   </head>
   <body>
+    <!-- Modal -->
+    <div class="modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Nuevos valores</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="nombreModal" class="col-sm-2 col-form-label">Nombre</label>
+                <div class="col-sm-10">
+                  <input class="form-control" type="text" id="nombreModal" />
+                </div>
+                <label for="apellidoModal" class="col-sm-2 col-form-label">Apellido</label>
+                <div class="col-sm-10">
+                  <input class="form-control" type="text" id="apellidoModal" />
+                </div>
+                <label for="correoModal" class="col-sm-2 col-form-label">Correo</label>
+                <div class="col-sm-10">
+                  <input type="email" class="form-control" id="correoModal" placeholder="name@example.com" />
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" id="guardarDatos" class="btn btn-primary">Guardar</button>
+            <button type="button" id="close-modal" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulario -->
     <form>
       <div class="form-group">
         <label for="nombreIn" class="col-sm-2 col-form-label">Nombre</label>
@@ -35,9 +74,12 @@
       <button id="btnAgregar" class="btn btn-primary">Agregar</button>
     </div>
     <hr />
+
+    <!-- Tabla -->
     <table class="table">
       <thead class="thead-dark">
         <tr class="tablaInit">
+          <th class="id" scope="col">#</th>
           <th class="nombre" scope="col">Nombre</th>
           <th class="apellido" scope="col">Apellido</th>
           <th class="correo" scope="col">Correo</th>
@@ -49,5 +91,5 @@
       <tbody class="tablaDatos"></tbody>
     </table>
   </body>
-  <script type="module" src="script.js"></script>
+  <script src="script.js"></script>
 </html>
