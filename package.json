@@ -1,0 +1,25 @@
+{
+  "name": "preparcial-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Geisson19/Preparcial-Web.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Geisson19/Preparcial-Web/issues"
+  },
+  "homepage": "https://github.com/Geisson19/Preparcial-Web#readme",
+  "dependencies": {
+    "eslint-config-prettier": "^8.3.0",
+    "prettier": "^2.4.1"
+  }
+}

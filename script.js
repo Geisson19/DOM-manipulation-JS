@@ -1,52 +1,52 @@
-'use strict';
+"use strict";
 
 //Saco los elementos que no van a cambiar en constantes globales
-const tabla = document.querySelector('.tablaDatos');
-const nombre = document.querySelector('.nombre');
-const apellido = document.querySelector('.apellido');
-const correo = document.querySelector('.correo');
-const btnAgregar = document.querySelector('#btnAgregar');
+const tabla = document.querySelector(".tablaDatos");
+const nombre = document.querySelector(".nombre");
+const apellido = document.querySelector(".apellido");
+const correo = document.querySelector(".correo");
+const btnAgregar = document.querySelector("#btnAgregar");
 
 //Json de los datos iniciales de la tabla (los cambié para probar los sorts)
 let ejemploDatos = [
   {
-    last_name: 'a',
-    first_name: 'z',
-    email: '1az@dell.com',
-    photo: 'http://dummyimage.com/155x119.jpg/ff4444/ffffff',
+    last_name: "a",
+    first_name: "z",
+    email: "1az@dell.com",
+    photo: "http://dummyimage.com/155x119.jpg/ff4444/ffffff",
   },
   {
-    last_name: 'c',
-    first_name: 'a',
-    email: '2cz@ibm.com',
-    photo: 'http://dummyimage.com/161x166.bmp/cc0000/ffffff',
+    last_name: "c",
+    first_name: "a",
+    email: "2cz@ibm.com",
+    photo: "http://dummyimage.com/161x166.bmp/cc0000/ffffff",
   },
   {
-    last_name: 'z',
-    first_name: 'c',
-    email: '3zc@macromedia.com',
-    photo: 'http://dummyimage.com/195x201.png/ff4444/ffffff',
+    last_name: "z",
+    first_name: "c",
+    email: "3zc@macromedia.com",
+    photo: "http://dummyimage.com/195x201.png/ff4444/ffffff",
   },
 ];
 
 const remplazarTabla = (personasOrdenadas) => {
-  tabla.innerHTML = '';
+  tabla.innerHTML = "";
   renderPersonas(personasOrdenadas);
 };
 
 const cambioDeColorListener = (tr) => {
   // Cuando el mouse está arriba de la fila
-  tr.addEventListener('mouseover', () => {
-    tr.style.backgroundColor = 'aquamarine';
+  tr.addEventListener("mouseover", () => {
+    tr.style.backgroundColor = "aquamarine";
   });
   // Cuando se sale da la fila
-  tr.addEventListener('mouseout', () => {
-    tr.style.backgroundColor = 'white';
+  tr.addEventListener("mouseout", () => {
+    tr.style.backgroundColor = "white";
   });
 };
 
 const borrarFilaButton = (tr, btnEliminar) => {
-  btnEliminar.addEventListener('click', () => {
+  btnEliminar.addEventListener("click", () => {
     tabla.removeChild(tr);
   });
 };
@@ -55,7 +55,7 @@ const borrarFilaButton = (tr, btnEliminar) => {
 const renderPersonas = (personas) => {
   let id = 0;
   personas.forEach((persona) => {
-    const tr = document.createElement('tr');
+    const tr = document.createElement("tr");
     tr.innerHTML = renderPersona(++id, persona);
     tabla.appendChild(tr);
     cambioDeColorListener(tr);
@@ -91,41 +91,39 @@ const ordenPorPropiedad = (prop, orden) => {
 
 /* Le agrego eventos a todos los headers que ordenan */
 
-nombre.addEventListener('click', () => {
-  const ordenado = ejemploDatos.sort(ordenPorPropiedad('first_name', 1));
+nombre.addEventListener("click", () => {
+  const ordenado = ejemploDatos.sort(ordenPorPropiedad("first_name", 1));
   remplazarTabla(ordenado);
 });
 
-apellido.addEventListener('click', () => {
-  const ordenado = ejemploDatos.sort(ordenPorPropiedad('last_name', 1));
+apellido.addEventListener("click", () => {
+  const ordenado = ejemploDatos.sort(ordenPorPropiedad("last_name", 1));
   remplazarTabla(ordenado);
 });
 
-correo.addEventListener('click', () => {
-  const ordenado = ejemploDatos.sort(ordenPorPropiedad('email', 1));
+correo.addEventListener("click", () => {
+  const ordenado = ejemploDatos.sort(ordenPorPropiedad("email", 1));
   remplazarTabla(ordenado);
 });
 /* --------------------------------------------------------------------- */
 
 // logica del botón de agregar
-btnAgregar.addEventListener('click', () => {
+btnAgregar.addEventListener("click", () => {
   // Obtengo los datos del form
-  const nombre = document.querySelector('#nombreIn').value;
-  const apellido = document.querySelector('#apellidoIn').value;
-  const correo = document.querySelector('#correoIn').value;
+  const nombre = document.querySelector("#nombreIn").value;
+  const apellido = document.querySelector("#apellidoIn").value;
+  const correo = document.querySelector("#correoIn").value;
   // Validación simple para agregar
-  const valido = nombre.length > 0 && apellido.length > 0 && correo.includes('@');
+  const valido = nombre.length > 0 && apellido.length > 0 && correo.includes("@");
   if (valido) {
     const nuevaPersona = {
       last_name: apellido,
       first_name: nombre,
       email: correo,
-      photo: 'http://dummyimage.com/155x119.jpg/ff4444/ffffff',
+      photo: "http://dummyimage.com/155x119.jpg/ff4444/ffffff",
     };
     ejemploDatos.push(nuevaPersona);
     remplazarTabla(ejemploDatos);
-  } else {
-    console.log('Datos no válidos');
   }
 });
 
