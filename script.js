@@ -1,13 +1,13 @@
 "use strict";
 //Saco los elementos que no van a cambiar en constantes globales
-const tabla = document.querySelector(".tablaDatos");
-const nombre = document.querySelector(".nombre");
-const apellido = document.querySelector(".apellido");
-const correo = document.querySelector(".correo");
+const contenedorGif = document.querySelector("#cardcon");
+const nombre = document.querySelector("#nombre");
+const apellido = document.querySelector("#apellido");
+const correo = document.querySelector("#email");
 const btnAgregar = document.querySelector("#btnAgregar");
 const modal = document.querySelector(".modal");
 
-//Json de los datos iniciales de la tabla (los cambié para probar los sorts)
+//Json de los datos iniciales de la contenedorGif (los cambié para probar los sorts)
 let ejemploDatos = [
   {
     last_name: "a",
@@ -29,25 +29,25 @@ let ejemploDatos = [
   },
 ];
 
-const remplazarTabla = (personasOrdenadas) => {
-  tabla.innerHTML = "";
+const remplazarcontenedorGif = (personasOrdenadas) => {
+  contenedorGif.innerHTML = "";
   renderPersonas(personasOrdenadas);
 };
 
-const cambioDeColorListener = (tr) => {
+const cambioDeColorListener = (cardbody) => {
   // Cuando el mouse está arriba de la fila
-  tr.addEventListener("mouseover", () => {
-    tr.style.backgroundColor = "aquamarine";
+  cardbody.addEventListener("mouseover", () => {
+    cardbody.style.backgroundColor = "aquamarine";
   });
   // Cuando se sale da la fila
-  tr.addEventListener("mouseout", () => {
-    tr.style.backgroundColor = "white";
+  cardbody.addEventListener("mouseout", () => {
+    cardbody.style.backgroundColor = "white";
   });
 };
 
 const borrarFilaButton = (tr, btnEliminar, persona) => {
   btnEliminar.addEventListener("click", () => {
-    tabla.removeChild(tr);
+    contenedorGif.removeChild(tr);
     ejemploDatos.splice(ejemploDatos.indexOf(persona), 1);
   });
 };
@@ -67,12 +67,12 @@ const actualizarFilaButton = (tr, id, btnActualizar, persona) => {
     });
 
     const btnGuardar = document.querySelector("#guardarDatos");
-    // Obtengo los datos del form
+
     btnGuardar.addEventListener("click", () => {
       const nombre = document.querySelector("#nombreModal").value;
       const apellido = document.querySelector("#apellidoModal").value;
       const correo = document.querySelector("#correoModal").value;
-      // Validación simple para agregar
+
       const valido = nombre.length > 0 && apellido.length > 0 && correo.includes("@");
       if (valido) {
         const nuevaPersona = {
@@ -84,7 +84,7 @@ const actualizarFilaButton = (tr, id, btnActualizar, persona) => {
         ejemploDatos[ejemploDatos.indexOf(persona)] = nuevaPersona;
         const newtr = document.createElement("tr");
         newtr.innerHTML = renderPersona(id, nuevaPersona);
-        tabla.replaceChild(newtr, tr);
+        contenedorGif.replaceChild(newtr, tr);
         modal.style.display = "none";
       }
     });
@@ -95,32 +95,34 @@ const actualizarFilaButton = (tr, id, btnActualizar, persona) => {
 const renderPersonas = (personas) => {
   let id = 0;
   personas.forEach((persona) => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = renderPersona(++id, persona);
-    tabla.appendChild(tr);
-    cambioDeColorListener(tr);
+    const card = document.createElement("div");
+    card.innerHTML = renderPersona(++id, persona);
+    contenedorGif.appendChild(card);
+    const backColor = document.querySelector(`#colorcard${id}`);
+    cambioDeColorListener(backColor);
     const btnEliminar = document.querySelector(`#btnBorrar${id}`);
     const btnActualizar = document.querySelector(`#btnActualizar${id}`);
-    borrarFilaButton(tr, btnEliminar, persona);
-    actualizarFilaButton(tr, id, btnActualizar, persona);
+    borrarFilaButton(card, btnEliminar, persona);
+    actualizarFilaButton(card, id, btnActualizar, persona);
   });
 };
 
-// Render de cada tr de los datos de una persona
 const renderPersona = (id, persona) => {
   return `
-    <tr class="datoPersona">
-      <td id="idpersona">${id}</td>
-      <td>${persona.first_name}</td>
-      <td>${persona.last_name}</td>
-      <td>${persona.email}</td>
-      <td><img src="${persona.photo}" alt="Foto"></td>
-      <td><button id="btnBorrar${id}" class="btn btn-light" >❌</button></td>
-      <td><button id="btnActualizar${id}"class="btn btn-light" data-toggle="modal">🆕</button></td>
-    </tr>`;
+  <div class="card" style="width: 18rem;">
+    <img src="${persona.photo}" class="card-img-top card-img" alt="${persona.first_name}">
+    <div id="colorcard${id}" class="card-body">
+    
+        <h5 class="card-title">${persona.first_name}</h5>
+        <p class="card-text">Apellido: ${persona.last_name} </p>
+        <p class="card-text">Correo: ${persona.email} </p>
+
+        <button id="btnBorrar${id}" class="btn btn-primary">❌</button>
+        <button id="btnActualizar${id}" class="btn btn-primary">🆕</button>
+    </div>
+  </div>`;
 };
 
-// Creo un "compareTo" por propiedad, que recibe también un orden por si se quiere poner ascendente o descendiente (1 o -1)
 const ordenPorPropiedad = (prop, orden) => {
   return (a, b) => {
     if (a[prop] > b[prop]) {
@@ -136,27 +138,26 @@ const ordenPorPropiedad = (prop, orden) => {
 
 nombre.addEventListener("click", () => {
   const ordenado = ejemploDatos.sort(ordenPorPropiedad("first_name", 1));
-  remplazarTabla(ordenado);
+  remplazarcontenedorGif(ordenado);
 });
 
 apellido.addEventListener("click", () => {
   const ordenado = ejemploDatos.sort(ordenPorPropiedad("last_name", 1));
-  remplazarTabla(ordenado);
+  remplazarcontenedorGif(ordenado);
 });
 
 correo.addEventListener("click", () => {
   const ordenado = ejemploDatos.sort(ordenPorPropiedad("email", 1));
-  remplazarTabla(ordenado);
+  remplazarcontenedorGif(ordenado);
 });
 /* --------------------------------------------------------------------- */
 
 // logica del botón de agregar
 btnAgregar.addEventListener("click", () => {
-  // Obtengo los datos del form
   const nombre = document.querySelector("#nombreIn").value;
   const apellido = document.querySelector("#apellidoIn").value;
   const correo = document.querySelector("#correoIn").value;
-  // Validación simple para agregar
+
   const valido = nombre.length > 0 && apellido.length > 0 && correo.includes("@");
   if (valido) {
     const nuevaPersona = {
@@ -166,9 +167,14 @@ btnAgregar.addEventListener("click", () => {
       photo: "http://dummyimage.com/155x119.jpg/ff4444/ffffff",
     };
     ejemploDatos.push(nuevaPersona);
-    remplazarTabla(ejemploDatos);
+    remplazarcontenedorGif(ejemploDatos);
   }
 });
 
 //Función inicial cuando se carga la pagina
-renderPersonas(ejemploDatos);
+
+const init = () => {
+  renderPersonas(ejemploDatos);
+};
+
+init();
